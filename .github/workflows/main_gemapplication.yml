@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://testdockerkast.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_4a7dd67a9c90440dae2f148bcc531561 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_a18d14badbbf4d7fad1057143193b6b8 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_4e735d19c61047f39a468f7f465f9d03 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_d82651b91ba94a26829528022f48ac91 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: testdockerkast.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_4a7dd67a9c90440dae2f148bcc531561 }}/gemapplication:${{ github.sha }}
+        tags: testdockerkast.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_4e735d19c61047f39a468f7f465f9d03 }}/application:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'gemapplication'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ecd73b69df8c40cd968d178b8746c50b }}
-        images: 'testdockerkast.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_4a7dd67a9c90440dae2f148bcc531561 }}/gemapplication:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ad7f41ef523d4293a5f728efb890c62e }}
+        images: 'testdockerkast.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_4e735d19c61047f39a468f7f465f9d03 }}/application:${{ github.sha }}'
