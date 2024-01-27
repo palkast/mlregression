@@ -1,0 +1,51 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - gemapplication
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to registry
+      uses: docker/login-action@v2
+      with:
+        registry: https://testdockerkast.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_2433c652f5714c2bae423f028866a076 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_1945774840584b27b8bffc47a818259d }}
+
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        tags: testdockerkast.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2433c652f5714c2bae423f028866a076 }}/application:${{ github.sha }}
+        file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'gemapplication'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_edc5eba74d684f28a1cdc75eb4c63d2e }}
+        images: 'testdockerkast.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2433c652f5714c2bae423f028866a076 }}/application:${{ github.sha }}'
