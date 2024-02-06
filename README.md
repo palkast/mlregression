@@ -1,5 +1,5 @@
 ## End to end ML project using CICD 
-This project is developed to deploy ml application using Github Action In Azure Web App.< /br>
+This project is developed to deploy ml application using Github Action In Azure Web App.
 ## Steps : 
 ## 1.Build the linear regression model to predict price of a GemStone.
 [![Picture1.png](https://i.postimg.cc/WbJ0ZMyV/Picture1.png)](https://postimg.cc/jLtW0JK3)
